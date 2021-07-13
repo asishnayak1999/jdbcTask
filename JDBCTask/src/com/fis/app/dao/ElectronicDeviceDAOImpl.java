@@ -1,14 +1,17 @@
 package com.fis.app.dao;
 
+
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 import com.fis.app.exce.NoDeviceFoundException;
 import com.fis.app.model.ElectrnoicDevice;
+import com.fis.app.model.Count;
 
 
 public class ElectronicDeviceDAOImpl implements IElectronicDeviceDAO{
@@ -18,7 +21,7 @@ public class ElectronicDeviceDAOImpl implements IElectronicDeviceDAO{
 	String insertElectronicDeviceQuery = "insert into fisapp.electronicDevice values(?,?,?,?,?,?,?)";
 	String selectAllElecronicDevice = "select * from fisapp.electronicDevice";
 	String selectEmployeeBasedOnBrandNameandType = "select * from fisapp.electronicDevice where deviceType = ? AND brandName = ?";
-	String countDeviceType = "SELECT COUNT(deviceType) FROM fisapp.electronicDevice where deviceType = ?";
+	String countDeviceType = "SELECT deviceType,COUNT(deviceType) FROM fisapp.electronicDevice group by deviceType";
 	String getSumBasedOnType = "SELECT SUM(cost) FROM fisapp.electronicDevice GROUP BY ?";
 	@Override
 	public boolean addDevice(ElectrnoicDevice device) throws Exception {		
@@ -113,26 +116,26 @@ public class ElectronicDeviceDAOImpl implements IElectronicDeviceDAO{
 		return eleList2;
 	}
 	@Override
-	public int countDeviceType(String type) throws Exception {
+	public List<Count> countDeviceType() throws Exception {
 		con = DatabaseUtil.getConnection();
-		int e = 0;
+		List<Count> e = new ArrayList<>();
 		if (con != null) {
 
 			PreparedStatement ps = con.prepareStatement(countDeviceType);
-			ps.setString(1, type);
-
-			//ResultSet rs = ps.executeQuery();
 			ResultSet rs = ps.executeQuery();
 			boolean isFound = false;
 			while (rs.next()) {
 				isFound = true;
-				ElectrnoicDevice temp = new ElectrnoicDevice();
+				Count temp = new Count();
 				
-				e = rs.getInt("COUNT(deviceType)");
+				temp.setDevType(rs.getString("deviceType"));
+				temp.setNum(rs.getInt("COUNT(deviceType)"));
+				
+				e.add(temp);
 			}
 
 			if (!isFound)
-				throw new NoDeviceFoundException(type,"xx");
+				throw new NoDeviceFoundException("XX","xx");
 
 		}
 		return e;
@@ -163,8 +166,11 @@ public class ElectronicDeviceDAOImpl implements IElectronicDeviceDAO{
 	@Override
 	public List<ElectrnoicDevice> getDevicesBasedOnPriceRangeandType(int range1, int range2, String type, List<ElectrnoicDevice> ls) {
 		
+		ls = ls.stream().filter(ed1->{
+			return ed1.getDeviceType().equals(type) && ed1.getCost() >= range1 && ((ElectrnoicDevice) ed1).getCost() <= range2;
+		}).collect(Collectors.toList());
 		
-		return null;
+		return ls;
 	}
 	@Override
 	public ElectrnoicDevice changeDevicePrice(int deviceId, int newPrice) throws NoDeviceFoundException {

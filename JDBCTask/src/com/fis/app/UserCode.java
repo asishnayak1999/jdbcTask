@@ -36,31 +36,37 @@ public static void main(String[] args) {
 			//boolean a5 = dao.addDevice(mockeld6);
 			//System.out.println(a5);
 //------------------------------------------------------------------------//		
-			/*
-			 * List<ElectrnoicDevice> list = dao.getAllDevices();
-			 * 
-			 * list.stream().forEach((ele)->System.out.println(ele));
-			 */
+			
+			 // List<ElectrnoicDevice> list = dao.getAllDevices();
+			 // list.stream().forEach((ele)->System.out.println(ele));
+			 
 //-------------------------------------------------------------------------//		
-			/*
-			 * List<ElectrnoicDevice> e = dao.getDevicesBasedOnBrandNameAndType("Apple","Mobile");
-			 * e.stream().forEach((el)->System.out.println(el));
-			 */
+			
+				//List<ElectrnoicDevice> e =
+				//dao.getDevicesBasedOnBrandNameAndType("Apple","Mobile");
+				//e.stream().forEach((el)->System.out.println(el));
+//			 
 //--------------------------------------------------------------------------//
-			/*
-			 * int count = dao.countDeviceType("Mobile"); System.out.println(count);
-			 * 
-			 */
+			
+//			List<Count> cc = dao.countDeviceType();
+//			cc.stream().forEach((el)->System.out.println(el));
+			
+
 //--------------------------------------------------------------------------//
-			/*
-			 * int totCost = dao.getSumofPriceBasedOnType("Laptop");
-			 * System.out.println(totCost);
-			 */
+			
+			 //int totCost = dao.getSumofPriceBasedOnType("Laptop");
+			 // System.out.println(totCost);
+			 
 			
 //------------------------------------------------------------------------//
-			List<ElectrnoicDevice> list = dao.getAllDevices();
 			
-		List<ElectrnoicDevice> filterList = dao.getDevicesBasedOnPriceRangeandType(20000, 120000, "Mobile",list);
+			 // List<ElectrnoicDevice> list = dao.getAllDevices();
+			 //
+			 //List<ElectrnoicDevice> filterList =
+			 //dao.getDevicesBasedOnPriceRangeandType(20000, 120000, "Mobile",list);
+			 // for(ElectrnoicDevice filteredWithRangeAndType : filterList) {
+			  
+			 //System.out.println(filteredWithRangeAndType); }
 			
 		} catch (Exception e) {
 			System.out.println(" Problem "+e);
